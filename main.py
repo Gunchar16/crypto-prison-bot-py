@@ -77,4 +77,4 @@ async def messageIntervalNft(ctx):
 
 
 keepAlive()
-client.run('OTYxOTYwNTAzOTM1MTExMTk5.YlAliA.cE3Urx8T9knlZfGwCHxZTjA1s0s')
+client.run('')

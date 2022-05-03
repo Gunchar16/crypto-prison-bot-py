@@ -15,10 +15,10 @@ def news_service(client, news):
       html_reader = open(new.file_name, "r", encoding="utf-8")
       if new.file_name == 'nftnow.html':
         html_news = result.find('article', {'class': 'article-loop article-loop__rounded article-loop__inside animate__fade-in'} )
-        if html_reader.read() != str(html_news):
+        url = html_news.find('a')['href']
+        if html_reader.read() != str(url):
           html_writer = open(new.file_name, "w", encoding="utf-8")
-          html_writer.write(str(html_news))
-          url = html_news.find('a')['href']
+          html_writer.write(str(url))
           value = html_news.find('h3').string
           src = html_news.find('div', attrs={'class': 'article-loop__featured-image'})['style'].split('url(')[1][:-2]
           embed=discord.Embed(color=0xd17000, title='Latest News', description=value)
@@ -30,10 +30,10 @@ def news_service(client, news):
           return embed
       else:
         html_news = result.find_all('article')[0].parent.find('a')
-        if html_reader.read() != str(html_news):
+        url = 'https://cryptonews.com' + html_news['href']
+        if not str(url).split('com/')[1] in html_reader.read():
           html_writer = open(new.file_name, "w", encoding="utf-8")
-          html_writer.write(str(html_news))
-          url = 'https://cryptonews.com' + html_news['href']
+          html_writer.write(str(url))
           value = html_news.find('img')['alt']
           src = html_news.find('img')['src']
           embed=discord.Embed(color=0xd17000, title='Latest News', description=value)

@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from urllib.request import Request, urlopen
 import requests
 from bs4 import BeautifulSoup

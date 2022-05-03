@@ -19,7 +19,10 @@ import Controllers.nft_news_controller as nft_news_controller
 import Controllers.crypto_news_controller as crypto_news_controller
 import Controllers.it_news_controller as it_news_controller
 
-client = commands.Bot(command_prefix = '?')
+intents = discord.Intents.default()
+intents.members = True
+
+client = commands.Bot(intents=intents, command_prefix = '?')
 
 status = ['Counting Ethereum', 'Collecting NFTs', 'Dropping $OAP', 'Solving Sneaky Peakys', 'Covering Tracks For Gramps', 'Hiding From M']
 
@@ -29,6 +32,9 @@ status = ['Counting Ethereum', 'Collecting NFTs', 'Dropping $OAP', 'Solving Snea
 @client.event
 async def on_ready():
     change_status.start()
+    messageIntervalCrypto.start()
+    messageIntervalNft.start()
+    messageIntervalIT.start()
     print("The bot is ready.")
 
 
@@ -43,7 +49,25 @@ async def change_status():
 
 
 
-
+@client.command(name='random')
+async def get_random(ctx, number=1):
+    if number > 25:
+        await ctx.send('The number cannot be bigger than 25')
+        return
+    embed=discord.Embed(color=0xd17000, title='The Winner' if number == 1 else 'The List of Winners', description='The Winner!' if number == 1 else 'The List of Winners!')
+    random_user = []
+    for x in range(number):
+        if(len(random_user) == 0):
+            choose = random.choice(ctx.message.channel.guild.members)
+            random_user.append(choose)
+            embed.add_field(name= f'Winner Number {x + 1}:' if number != 1 else 'Winner:', value=choose)
+        else:
+            choose = random.choice(ctx.message.channel.guild.members)
+            while choose in random_user:
+                choose = random.choice(ctx.message.channel.guild.members)
+            random_user.append(choose)
+            embed.add_field(name= f'Winner Number {x + 1}:', value=choose)
+    await ctx.send(embed=embed)
 
 
 
@@ -55,11 +79,12 @@ async def RepeatMessageCrypto(ctx,enabled='start', interval=10):
         messageIntervalCrypto.change_interval(seconds=int(interval))
         messageIntervalCrypto.start(ctx)
 
-@tasks.loop(seconds=10)
-async def messageIntervalCrypto(ctx):
+@tasks.loop(seconds=10800)
+async def messageIntervalCrypto():
+    channel = client.get_channel(963405867468849152)
     get_embed = await crypto_news_controller.message_handler(client)
     if get_embed is not None:
-        await ctx.send(embed=get_embed)
+        await channel.send(embed=get_embed)
 
 @client.command()
 async def RepeatMessageIT(ctx,enabled='start', interval=10):
@@ -69,11 +94,12 @@ async def RepeatMessageIT(ctx,enabled='start', interval=10):
         messageIntervalIT.change_interval(seconds=int(interval))
         messageIntervalIT.start(ctx)
 
-@tasks.loop(seconds=10)
-async def messageIntervalIT(ctx):
+@tasks.loop(seconds=10800)
+async def messageIntervalIT():
+    channel = client.get_channel(963405957071794226)
     get_embed = await it_news_controller.message_handler(client)
     if get_embed is not None:
-        await ctx.send(embed=get_embed)
+        await channel.send(embed=get_embed)
 
 @client.command()
 async def RepeatMessageNft(ctx,enabled='start', interval=10):
@@ -82,14 +108,14 @@ async def RepeatMessageNft(ctx,enabled='start', interval=10):
     elif enabled.lower() == 'start':
         messageIntervalNft.change_interval(seconds=int(interval))
         messageIntervalNft.start(ctx)
-
-@tasks.loop(seconds=10)
-async def messageIntervalNft(ctx):
+@tasks.loop(seconds=10800)
+async def messageIntervalNft():
+    channel = client.get_channel(963405890340421672)
     get_embed = await nft_news_controller.message_handler(client)
     if get_embed is not None:
-        await ctx.send(embed=get_embed)
+        await channel.send(embed=get_embed)
 
 
-
+my_secret = os.environ['TAH420']
 keepAlive()
-client.run('OTYxOTYwNTAzOTM1MTExMTk5.YlAliA.wHtGE5LXukdJ5FdtxCirVyVEf1I')
+client.run(my_secret)

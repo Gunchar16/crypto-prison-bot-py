@@ -11,7 +11,7 @@ from Infrastructure.News import News
 
 async def message_handler(client):
   news = [
-    News('https://cryptonews.com/news/nft-news/', 'nftnews.html'),
-    News('https://nftnow.com/category/news/', 'nftnow.html')
+    News('https://cryptonews.com/news/nft-news/', 'nftnews.txt'),
+    News('https://nftnow.com/category/news/', 'nftnow.txt')
     ]
   return news_service(client, news)

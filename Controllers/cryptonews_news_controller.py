@@ -13,7 +13,7 @@ def news_service(client, news):
       get_html = urlopen(req).read()
       result = BeautifulSoup(get_html, "html.parser")
       html_reader = open(new.file_name, "r", encoding="utf-8")
-      if new.file_name == 'nftnow.html':
+      if new.file_name == 'nftnow.txt':
         html_news = result.find('article', {'class': 'article-loop article-loop__rounded article-loop__inside animate__fade-in'} )
         url = html_news.find('a')['href']
         if html_reader.read() != str(url):

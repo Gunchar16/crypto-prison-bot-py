@@ -11,8 +11,8 @@ from Infrastructure.News import News
 
 async def message_handler(client):
   news = [
-    News('https://www.wired.com/tag/coding/', 'coding.html'),
-    News('https://www.wired.com/tag/programming/', 'programming.html'),
-    News('https://www.wired.com/tag/technology/', 'technology.html')
+    News('https://www.wired.com/tag/coding/', 'coding.txt'),
+    News('https://www.wired.com/tag/programming/', 'programming.txt'),
+    News('https://www.wired.com/tag/technology/', 'technology.txt')
     ]
   return news_service(client, news)

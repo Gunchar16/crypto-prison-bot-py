@@ -11,11 +11,11 @@ from Infrastructure.News import News
 
 async def message_handler(client):
   news = [
-    News('https://cryptonews.com/news/bitcoin-news/', 'bitcoinnews.html'),
-    News('https://cryptonews.com/news/ethereum-news/', 'ethereumnews.html'),
-    News('https://cryptonews.com/news/defi-news/', 'definews.html'),
-    News('https://cryptonews.com/news/altcoin-news/', 'altcoinnews.html'),
-    News('https://cryptonews.com/news/blockchain-news/', 'blockchainnews.html'),
-    News('https://cryptonews.com/news/cryptonews-deals/', 'cryptodeals.html')
+    News('https://cryptonews.com/news/bitcoin-news/', 'bitcoinnews.txt'),
+    News('https://cryptonews.com/news/ethereum-news/', 'ethereumnews.txt'),
+    News('https://cryptonews.com/news/defi-news/', 'definews.txt'),
+    News('https://cryptonews.com/news/altcoin-news/', 'altcoinnews.txt'),
+    News('https://cryptonews.com/news/blockchain-news/', 'blockchainnews.txt'),
+    News('https://cryptonews.com/news/cryptonews-deals/', 'cryptodeals.txt')
     ]
   return news_service(client, news)

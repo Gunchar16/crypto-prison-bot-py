@@ -9,6 +9,8 @@ import schedule
 import discord
 from discord.ext import commands, tasks
 from discord.voice_client import VoiceClient
+from discord_slash import SlashCommand, SlashContext
+from discord_slash.utils.manage_commands import create_choice, create_option
 import youtube_dl
 import random
 from random import choice
@@ -23,10 +25,14 @@ intents = discord.Intents.default()
 intents.members = True
 
 client = commands.Bot(intents=intents, command_prefix = '?')
+slash = SlashCommand(client, sync_commands=True)
+
 
 status = ['Counting Ethereum', 'Collecting NFTs', 'Dropping $OAP', 'Solving Sneaky Peakys', 'Covering Tracks For Gramps', 'Hiding From M']
 
 
+
+guild_id = 932592179275243531
 
 
 @client.event
@@ -49,8 +55,20 @@ async def change_status():
 
 
 
-@client.command(name='random')
-async def get_random(ctx, number=1):
+@slash.slash(
+  name='random',
+  description='Get A List of Random User(s)', 
+  guild_ids=[guild_id],
+  options=[
+    create_option(
+      name='number',
+      description='Choose The Number',
+      required=True,
+      option_type=4
+    )
+  ]
+  )
+async def get_random(ctx:SlashContext, number:int):
     if number > 25:
         await ctx.send('The number cannot be bigger than 25')
         return
@@ -58,13 +76,13 @@ async def get_random(ctx, number=1):
     random_user = []
     for x in range(number):
         if(len(random_user) == 0):
-            choose = random.choice(ctx.message.channel.guild.members)
+            choose = random.choice(client.get_guild(guild_id).members)
             random_user.append(choose)
             embed.add_field(name= f'Winner Number {x + 1}:' if number != 1 else 'Winner:', value=choose)
         else:
-            choose = random.choice(ctx.message.channel.guild.members)
+            choose = random.choice(client.get_guild(guild_id).members)
             while choose in random_user:
-                choose = random.choice(ctx.message.channel.guild.members)
+                choose = random.choice(client.get_guild(guild_id).members)
             random_user.append(choose)
             embed.add_field(name= f'Winner Number {x + 1}:', value=choose)
     await ctx.send(embed=embed)
@@ -96,7 +114,7 @@ async def RepeatMessageIT(ctx,enabled='start', interval=10):
 
 @tasks.loop(seconds=10800)
 async def messageIntervalIT():
-    channel = client.get_channel(963405957071794226)
+    channel = client.get_channel(963405890340421672)
     get_embed = await it_news_controller.message_handler(client)
     if get_embed is not None:
         await channel.send(embed=get_embed)
@@ -114,7 +132,6 @@ async def messageIntervalNft():
     get_embed = await nft_news_controller.message_handler(client)
     if get_embed is not None:
         await channel.send(embed=get_embed)
-
 
 my_secret = os.environ['TAH420']
 keepAlive()

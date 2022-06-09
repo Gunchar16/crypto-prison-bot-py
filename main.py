@@ -152,7 +152,7 @@ async def RepeatMessageHodlers(ctx, enabled='start', interval=10):
 
 @tasks.loop(seconds=10800)
 async def messageIntervalHodlers():
-    channel = client.get_channel(948969072085848068)
+    channel = client.get_channel(984465846766301194)
     get_embed = await hodlers_news_controller.message_handler(client)
     if get_embed is not None:
         await channel.send(embed=get_embed)

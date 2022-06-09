@@ -20,6 +20,7 @@ import numpy as np
 import Controllers.nft_news_controller as nft_news_controller
 import Controllers.crypto_news_controller as crypto_news_controller
 import Controllers.it_news_controller as it_news_controller
+import Controllers.hodlers_hub_news_controller as hodlers_news_controller
 
 intents = discord.Intents.default()
 intents.members = True
@@ -41,6 +42,7 @@ async def on_ready():
     messageIntervalCrypto.start()
     messageIntervalNft.start()
     messageIntervalIT.start()
+    messageIntervalHodlers.start()
     print("The bot is ready.")
 
 
@@ -139,6 +141,21 @@ async def messageIntervalNft():
     if get_embed is not None:
         await channel.send(embed=get_embed)
 
+
+@client.command()
+async def RepeatMessageHodlers(ctx, enabled='start', interval=10):
+    if enabled.lower() == 'stop':
+        messageIntervalHodlers.cancel()
+    elif enabled.lower() == 'start':
+        messageIntervalHodlers.change_interval(seconds=int(interval))
+        messageIntervalHodlers.start(ctx)
+
+@tasks.loop(seconds=10800)
+async def messageIntervalHodlers():
+    channel = client.get_channel(948969072085848068)
+    get_embed = await hodlers_news_controller.message_handler(client)
+    if get_embed is not None:
+        await channel.send(embed=get_embed)
 
 my_secret = os.environ['TAH420']
 keepAlive()
